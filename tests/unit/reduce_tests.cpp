@@ -95,8 +95,8 @@ TYPED_TEST_SUITE(TransportTest, ExecutionTypes);
 TYPED_TEST(TransportTest, CountBig) {
     const size_t num = 10000;
     GenResult result = generateRandomTransports(num);
-    auto executionPolicy = TypeParam{};
-    CountResult count = std::reduce(std::move(executionPolicy), result.transports.begin(), result.transports.end(),
+    constexpr TypeParam executionPolicy;
+    CountResult count = std::reduce(executionPolicy, result.transports.begin(), result.transports.end(),
                                     CountResult{}, [](CountResult lhs, CountResult rhs) {
         return lhs + rhs;
     });
