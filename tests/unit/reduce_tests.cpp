@@ -27,6 +27,39 @@ namespace {
         TypesCount types;
         FuelsCount fuels;
         CompaniesCount companies;
+
+        CountResult(const Transport& transport) {
+            types[transport.type]++;
+            fuels[transport.fuel]++;
+            companies[transport.company]++;
+        }
+
+        CountResult() = default;
+        CountResult(const CountResult&) = default;
+        CountResult(CountResult&&) = default;
+        CountResult& operator=(const CountResult&) = default;
+        CountResult& operator=(CountResult&&) = default;
+
+        CountResult& operator+=(const CountResult& other) {
+            for(const auto& [type, count] : other.types) {
+                types[type] += count;
+            }
+            for(const auto& [fuel, count] : other.fuels) {
+                fuels[fuel] += count;
+            }
+            for(const auto& [company, count] : other.companies) {
+                companies[company] += count;
+            }
+            return *this;
+        }
+
+        CountResult operator+(const CountResult& other) const {
+            CountResult result = *this;
+            result += other;
+            return result;
+        }
+
+
     };
 
     struct GenResult {
@@ -52,71 +85,26 @@ namespace {
     }
 }
 
-
-TEST(Transport, CountByType) {
-    const Transports transports = {
-        {Transport::Type::Car, Transport::Fuel::Gasoline, "Toyota"},
-        {Transport::Type::Bus, Transport::Fuel::Diesel, "Mercedes"},
-        {Transport::Type::Truck, Transport::Fuel::Diesel, "Volvo"},
-        {Transport::Type::Car, Transport::Fuel::Electric, "Tesla"},
-        {Transport::Type::Bus, Transport::Fuel::Gasoline, "Volkswagen"},
-        {Transport::Type::Truck, Transport::Fuel::Gasoline, "Ford"},
-        {Transport::Type::Car, Transport::Fuel::Diesel, "BMW"},
-        {Transport::Type::Bus, Transport::Fuel::Electric, "BYD"},
-        {Transport::Type::Bus, Transport::Fuel::Gasoline, "BYD"}
-    };
-    TypesCount count = std::reduce(transports.begin(), transports.end(), TypesCount{}, [](TypesCount acc, Transport transport) {
-        acc[transport.type]++;
-        return acc;
-    });
-
-    EXPECT_EQ(count[Transport::Type::Car], 3);
-    EXPECT_EQ(count[Transport::Type::Bus], 4);
-    EXPECT_EQ(count[Transport::Type::Truck], 2);
-}
-
-TEST(Transport, CountByAll) {
-    const Transports transports = {
-        {Transport::Type::Car, Transport::Fuel::Gasoline, "Toyota"},
-        {Transport::Type::Bus, Transport::Fuel::Diesel, "Mercedes"},
-        {Transport::Type::Truck, Transport::Fuel::Diesel, "Volvo"},
-        {Transport::Type::Car, Transport::Fuel::Electric, "Tesla"},
-        {Transport::Type::Bus, Transport::Fuel::Gasoline, "Mercedes"},
-        {Transport::Type::Truck, Transport::Fuel::Gasoline, "Mercedes"},
-        {Transport::Type::Car, Transport::Fuel::Diesel, "BMW"},
-        {Transport::Type::Bus, Transport::Fuel::Electric, "BYD"},
-        {Transport::Type::Bus, Transport::Fuel::Gasoline, "BYD"}
-    };
-    CountResult count = std::reduce(transports.begin(), transports.end(), CountResult{}, [](CountResult acc, Transport transport) {
-        acc.types[transport.type]++;
-        acc.fuels[transport.fuel]++;
-        acc.companies[transport.company]++;
-        return acc;
-    });
-
-    EXPECT_EQ(count.types[Transport::Type::Car], 3);
-    EXPECT_EQ(count.types[Transport::Type::Bus], 4);
-    EXPECT_EQ(count.types[Transport::Type::Truck], 2);
-
-    EXPECT_EQ(count.fuels[Transport::Fuel::Gasoline], 4);
-    EXPECT_EQ(count.fuels[Transport::Fuel::Diesel], 3);
-    EXPECT_EQ(count.fuels[Transport::Fuel::Electric], 2);
-
-    EXPECT_EQ(count.companies["Toyota"], 1);
-    EXPECT_EQ(count.companies["Mercedes"], 3);
-    EXPECT_EQ(count.companies["Volvo"], 1);
-    EXPECT_EQ(count.companies["BYD"], 2);
-    EXPECT_EQ(count.companies.size(), 6);
-}
-
 TEST(Transport, CountBigSeq) {
     const size_t num = 10000;
     GenResult result = generateRandomTransports(num);
-    CountResult count = std::reduce(/*std::execution::seq, */result.transports.begin(), result.transports.end(), CountResult{}, [](CountResult acc, Transport transport) {
-        acc.types[transport.type]++;
-        acc.fuels[transport.fuel]++;
-        acc.companies[transport.company]++;
-        return acc;
+    CountResult count = std::reduce(std::execution::seq, result.transports.begin(), result.transports.end(),
+                                    CountResult{}, [](CountResult lhs, CountResult rhs) {
+        return lhs + rhs;
+    });
+
+    EXPECT_EQ(count.types, result.typesCount);
+    EXPECT_EQ(count.fuels, result.fuelsCount);
+    EXPECT_EQ(count.companies.size(), num);
+}
+
+
+TEST(Transport, CountBigPar) {
+    const size_t num = 10000;
+    GenResult result = generateRandomTransports(num);
+    CountResult count = std::reduce(std::execution::par, result.transports.begin(), result.transports.end(),
+                                    CountResult{}, [](CountResult lhs, CountResult rhs) {
+        return lhs + rhs;
     });
 
     EXPECT_EQ(count.types, result.typesCount);
