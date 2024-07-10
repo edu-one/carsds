@@ -1,0 +1,10 @@
+- [ ] Initial project repo
+- [ ] std::reduce test
+- [ ] third parties
+	- [ ] csv
+	- [ ] fmt
+	- [ ] logging?
+	- [ ] json
+- [ ] read input data
+- [ ] process objects in reduce?
+- [ ] tunings
