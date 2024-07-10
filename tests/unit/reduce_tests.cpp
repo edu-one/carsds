@@ -85,24 +85,16 @@ namespace {
     }
 }
 
-TEST(Transport, CountBigSeq) {
+template <typename ExecutionType> class TransportTest : public ::testing::Test {};
+
+using ExecutionTypes = ::testing::Types<std::execution::sequenced_policy, std::execution::parallel_policy, std::execution::parallel_unsequenced_policy>;
+
+TYPED_TEST_SUITE(TransportTest, ExecutionTypes);
+
+TYPED_TEST(TransportTest, CountBig) {
     const size_t num = 10000;
     GenResult result = generateRandomTransports(num);
-    CountResult count = std::reduce(std::execution::seq, result.transports.begin(), result.transports.end(),
-                                    CountResult{}, [](CountResult lhs, CountResult rhs) {
-        return lhs + rhs;
-    });
-
-    EXPECT_EQ(count.types, result.typesCount);
-    EXPECT_EQ(count.fuels, result.fuelsCount);
-    EXPECT_EQ(count.companies.size(), num);
-}
-
-
-TEST(Transport, CountBigPar) {
-    const size_t num = 10000;
-    GenResult result = generateRandomTransports(num);
-    CountResult count = std::reduce(std::execution::par, result.transports.begin(), result.transports.end(),
+    CountResult count = std::reduce(TypeParam{}, result.transports.begin(), result.transports.end(),
                                     CountResult{}, [](CountResult lhs, CountResult rhs) {
         return lhs + rhs;
     });
