@@ -1,4 +1,8 @@
-carsds C++ small test project
+program to analyze the following dataset. 
+ 
+https://www.kaggle.com/datasets/zubairatha/revving-up-telangana-vehicle-sales-2023?select=telangana_vehicle_sales.csv
+ 
+The output should show a distribution/count of cars by category (transport or non-transport), company, fuel type.
 ===============================
 
 # Project layout
