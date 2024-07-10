@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.23)
 
 project(carsds VERSION 0.0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 option(WITH_TESTS "build tests?" ON)
 

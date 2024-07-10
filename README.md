@@ -13,6 +13,7 @@ The output should show a distribution/count of cars by category (transport or no
 │   └── carsds.h
 ├── src          # Source files
 │   └── carsds.cpp
+|-- resources    # Data files
 ├── tests        # Various tests
 │   ├── integration
 │   ├── performance

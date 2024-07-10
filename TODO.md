@@ -1,4 +1,4 @@
-- [ ] Initial project repo
+- [x] Initial project repo
 - [ ] std::reduce test
 - [ ] third parties
 	- [ ] csv
