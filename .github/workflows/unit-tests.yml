@@ -16,6 +16,8 @@ jobs:
     steps:
       # Checks-out repository under $GITHUB_WORKSPACE, so job can access it
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Install essential packages for C++ development
         run: |
