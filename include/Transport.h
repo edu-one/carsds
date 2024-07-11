@@ -11,14 +11,16 @@
 #include <nlohmann/json.hpp>
 #include <magic_enum/magic_enum.hpp>
 
-#define DV_JSON_SERIALIZE_ENUM_ENTRY(e) \
-    { e, magic_enum::enum_name(e) }
+namespace csv {
+    class CSVRow;
+}
 
 namespace dv {
     struct Transport {
         enum class Category { Transport, NonTransport, Unknown };
-
         enum class Fuel { Petrol, Diesel, Battery, CNGPetrol, PetrolLPG, Unknown };
+
+        static Transport fromCSVRow(const csv::CSVRow& row);
 
         Category category;
         Fuel fuel;

@@ -11,6 +11,7 @@
 
 namespace dv::carsds {
     nlohmann::json processSeq(const std::filesystem::path& in);
+    nlohmann::json processPar(const std::filesystem::path& in);
 } // namespace dv::carsds
 
 #endif // __DV_INCLUDE_CARSDS_H__

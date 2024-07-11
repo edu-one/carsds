@@ -11,7 +11,9 @@ option(WITH_TESTS "build tests?" ON)
 
 add_library(carsds
   src/carsprocessor.cpp
-  src/CountResult.cpp)
+  src/CountResult.cpp
+  src/CSVUtils.cpp
+  src/Transport.cpp)
 target_include_directories(carsds PUBLIC include)
 
 find_package(vincentlaucsb-csv-parser)

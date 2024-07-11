@@ -11,15 +11,18 @@
 
 #include <unordered_map>
 
+#include <cstdint>
+
+
 namespace csv {
     class CSVRow;
 }
 
 namespace dv {
 
-    using CategoriesCount = std::unordered_map<Transport::Category, size_t>;
-    using FuelsCount = std::unordered_map<Transport::Fuel, size_t>;
-    using CompaniesCount = std::unordered_map<std::string, size_t>;
+    using CategoriesCount = std::unordered_map<Transport::Category, uint64_t>;
+    using FuelsCount = std::unordered_map<Transport::Fuel, uint64_t>;
+    using CompaniesCount = std::unordered_map<std::string, uint64_t>;
 
     struct CountResult {
         CategoriesCount categories;
