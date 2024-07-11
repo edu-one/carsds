@@ -1,10 +1,9 @@
 - [x] Initial project repo
-- [ ] std::reduce test
-- [ ] third parties
-	- [ ] csv
-	- [ ] fmt
-	- [ ] logging?
-	- [ ] json
-- [ ] read input data
+- [x] std::reduce test
+- [x] third parties
+	- [x] csv
+	- [x] json
+	- [x] magic_enum
+- [x] read input data
 - [ ] process objects in reduce?
 - [ ] tunings

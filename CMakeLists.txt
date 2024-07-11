@@ -9,7 +9,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 option(WITH_TESTS "build tests?" ON)
 
-add_library(carsds src/carsprocessor.cpp)
+add_library(carsds
+  src/carsprocessor.cpp
+  src/CountResult.cpp)
 target_include_directories(carsds PUBLIC include)
 
 find_package(vincentlaucsb-csv-parser)

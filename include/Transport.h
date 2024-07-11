@@ -1,3 +1,7 @@
+/* Copyright (C) Denys Valchuk - All Rights Reserved
+ * ZHZhbGNodWtAZ21haWwuY29tCg==
+ */
+
 #ifndef __DV_INCLUDE_TRANSPORT_H__
 #define __DV_INCLUDE_TRANSPORT_H__
 
@@ -20,6 +24,8 @@ namespace dv {
         Fuel fuel;
         std::string company;
     };
+
+    using Transports = std::vector<Transport>;
 }
 
 

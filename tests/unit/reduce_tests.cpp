@@ -3,6 +3,7 @@
  */
 
 #include "Transport.h"
+#include "CountResult.h"
 
 #include <gtest/gtest.h>
 
@@ -17,52 +18,6 @@ using namespace dv;
 
 
 namespace {
-    using Transports = std::vector<Transport>;
-
-    using CategoriesCount = std::unordered_map<Transport::Category, size_t>;
-    using FuelsCount = std::unordered_map<Transport::Fuel, size_t>;
-    using CompaniesCount = std::unordered_map<std::string, size_t>;
-
-
-    struct CountResult {
-        CategoriesCount categories;
-        FuelsCount fuels;
-        CompaniesCount companies;
-
-        CountResult(const Transport& transport) {
-            categories[transport.category]++;
-            fuels[transport.fuel]++;
-            companies[transport.company]++;
-        }
-
-        CountResult() = default;
-        CountResult(const CountResult&) = default;
-        CountResult(CountResult&&) = default;
-        CountResult& operator=(const CountResult&) = default;
-        CountResult& operator=(CountResult&&) = default;
-
-        CountResult& operator+=(const CountResult& other) {
-            for(const auto& [type, count] : other.categories) {
-                categories[type] += count;
-            }
-            for(const auto& [fuel, count] : other.fuels) {
-                fuels[fuel] += count;
-            }
-            for(const auto& [company, count] : other.companies) {
-                companies[company] += count;
-            }
-            return *this;
-        }
-
-        CountResult operator+(const CountResult& other) const {
-            CountResult result = *this;
-            result += other;
-            return result;
-        }
-
-
-    };
-
     struct GenResult {
         Transports transports;
         CategoriesCount categoriesCount;
@@ -93,7 +48,8 @@ using ExecutionTypes = ::testing::Types<std::execution::sequenced_policy, std::e
 
 TYPED_TEST_SUITE(TransportTest, ExecutionTypes);
 
-TYPED_TEST(TransportTest, DISABLED_CountBig) {
+//TYPED_TEST(TransportTest, DISABLED_CountBig) {
+TYPED_TEST(TransportTest, CountBig) {
     const size_t num = 10000;
     GenResult result = generateRandomTransports(num);
     constexpr TypeParam executionPolicy;

@@ -4,6 +4,7 @@
 
 #include "carsprocessor.h"
 #include "Transport.h"
+#include "CountResult.h"
 
 #include <csv.hpp>
 
@@ -13,94 +14,7 @@
 #include <unordered_map>
 #include <string_view>
 
-using namespace csv;
-using namespace dv;
-
-namespace {
-    constexpr auto kCategoryHeader = "category";
-    constexpr auto kFuelHeader = "fuel";
-    constexpr auto kCompanyHeader = "makerName";
-
-    using CategoriesCount = std::unordered_map<Transport::Category, size_t>;
-    using FuelsCount = std::unordered_map<Transport::Fuel, size_t>;
-    using CompaniesCount = std::unordered_map<std::string, size_t>;
-
-    Transport::Category toCategory(const CSVRow& row) {
-        const auto category = row[kCategoryHeader].get<std::string_view>();
-        // TODO:denysv: do we have more categories in csv?
-        if (category == "Transport") {
-            return Transport::Category::Transport;
-        } else if (category == "Non Transport") {
-            return Transport::Category::NonTransport;
-        }
-        return Transport::Category::Unknown;
-    }
-
-    Transport::Fuel toFuel(const CSVRow& row) {
-        const auto fuel = row[kFuelHeader].get<std::string_view>();
-        if (fuel == "PETROL") {
-            return Transport::Fuel::Petrol;
-        } else if (fuel == "DIESEL") {
-            return Transport::Fuel::Diesel;
-        } else if (fuel == "BATTERY") {
-            return Transport::Fuel::Battery;
-        } else if (fuel == "CNG PETROL") {
-            return Transport::Fuel::CNGPetrol;
-        } else if (fuel == "PETROL LPG") {
-            return Transport::Fuel::PetrolLPG;
-        }
-        return Transport::Fuel::Unknown;
-    }
-
-    std::string toCompany(const CSVRow& row) {
-        return row[kCompanyHeader].get<std::string>();
-    }
-
-    struct CountResult {
-        CategoriesCount categories;
-        FuelsCount fuels;
-        CompaniesCount companies;
-
-        CountResult(const CSVRow& row) {
-            categories[toCategory(row)]++;
-            fuels[toFuel(row)]++;
-            companies[toCompany(row)]++;
-        }
-
-        CountResult() = default;
-        CountResult(const CountResult&) = default;
-        CountResult(CountResult&&) = default;
-        CountResult& operator=(const CountResult&) = default;
-        CountResult& operator=(CountResult&&) = default;
-
-        CountResult& operator+=(const CountResult& other) {
-            for(const auto& [type, count] : other.categories) {
-                categories[type] += count;
-            }
-            for(const auto& [fuel, count] : other.fuels) {
-                fuels[fuel] += count;
-            }
-            for(const auto& [company, count] : other.companies) {
-                companies[company] += count;
-            }
-            return *this;
-        }
-
-        CountResult operator+(const CountResult& other) const {
-            CountResult result = *this;
-            result += other;
-            return result;
-        }
-
-    };
-
-    void to_json(nlohmann::json &j, const CountResult &info) {
-        j = nlohmann::json::object();
-        j["categories"] = info.categories;
-        j["fuels"] = info.fuels;
-        j["companies"] = info.companies;
-    }
-}
+using dv::CountResult;
 
 namespace dv::carsds {
 
