@@ -7,5 +7,5 @@
 - [x] read input data
 - [x] process objects in reduce?
 - [ ] tunings
-- [ ] separate tool for manual tetsing
-- [ ] how to use the project (README.md)
+- [x] separate tool for manual tetsing
+- [x] how to use the project (README.md)

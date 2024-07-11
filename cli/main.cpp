@@ -28,18 +28,25 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    const std::filesystem::path in = argv[2];
-
-    const auto t1 = std::chrono::high_resolution_clock::now();
-    nlohmann::json result;
-    if (mode == "seq") {
-        result = dv::carsds::processSeq(in);
-    } else {
-        result = dv::carsds::processPar(in);
+    try {
+        const std::filesystem::path in = argv[2];
+        const auto t1 = std::chrono::high_resolution_clock::now();
+        nlohmann::json result;
+        if (mode == "seq") {
+            result = dv::carsds::processSeq(in);
+        } else {
+            result = dv::carsds::processPar(in);
+        }
+        const auto t2 = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double, std::milli> ms = t2 - t1;
+        std::cout << "Time: " << ms.count() << " ms" << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    } catch (...) {
+        std::cerr << "Unknown error" << std::endl;
+        return EXIT_FAILURE;
     }
-    const auto t2 = std::chrono::high_resolution_clock::now();
-    const std::chrono::duration<double, std::milli> ms = t2 - t1;
-    std::cout << "Time: " << ms.count() << " ms" << std::endl;
 
     return EXIT_SUCCESS;
 }
