@@ -19,6 +19,11 @@ namespace {
     const fs::path kSmallDSPath = kResourcesDir / "telangana_vehicle_sales_small.csv";
 }
 
+TEST(Process, InvalidPath) {
+    ASSERT_THROW(dv::carsds::processSeq("invalid_path"), std::runtime_error);
+    ASSERT_THROW(dv::carsds::processPar("invalid_path"), std::runtime_error);
+}
+
 using ProcessFunc = nlohmann::json (*)(const std::filesystem::path&);
 
 struct ProcessTest : public ::testing::TestWithParam<ProcessFunc> {
