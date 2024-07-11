@@ -5,6 +5,7 @@
 	- [x] json
 	- [x] magic_enum
 - [x] read input data
-- [ ] process objects in reduce?
+- [x] process objects in reduce?
 - [ ] tunings
+- [ ] separate tool for manual tetsing
 - [ ] how to use the project (README.md)

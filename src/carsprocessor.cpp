@@ -42,14 +42,17 @@ nlohmann::json processPar(const std::filesystem::path& in) {
         throw std::runtime_error("File does not exist");
     }
 
-    auto format = csv::CSVFormat().delimiter({','}).header_row(0);
-    const auto pathStr = in.string();
-    // memory mapped by default...
-    csv::CSVReader reader(pathStr, format);
-
     Transports transports;
-    for(auto& row : reader) {
-        transports.emplace_back(Transport::fromCSVRow(row));
+    {
+        auto format = csv::CSVFormat().delimiter({','}).header_row(0);
+        const auto pathStr = in.string();
+        // memory mapped by default...
+        csv::CSVReader reader(pathStr, format);
+
+        for (auto &row : reader) {
+            transports.emplace_back(Transport::fromCSVRow(row));
+        }
+        // scope to release memory, which is not needed anymore...
     }
 
     // to specify execution policy we should use forward iterator instead of input iterator...

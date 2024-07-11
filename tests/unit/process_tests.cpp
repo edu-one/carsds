@@ -100,6 +100,28 @@ TEST(Process, smallDS_PAR) {
     ASSERT_EQ(companies, expectedCompanies);
 }
 
+TEST(Process, juneDS_SEQ) {
+    const auto result = dv::carsds::processSeq(kJuneDSPath);
+
+    const auto& categories = result["categories"];
+    const auto& fuels = result["fuels"];
+    const auto& companies = result["companies"];
+
+    ASSERT_EQ(categories["Transport"], 18494);
+    ASSERT_EQ(categories["NonTransport"], 136421);
+
+    const nlohmann::json expectedFuels = R"({
+        "Battery": 8018,
+        "CNGPetrol": 4459,
+        "Diesel": 21507,
+        "Petrol": 116477,
+        "PetrolLPG": 1360,
+        "Unknown": 3094
+    })"_json;
+    ASSERT_EQ(fuels, expectedFuels);
+    ASSERT_EQ(companies.size(), 399);
+}
+
 TEST(Process, juneDS_PAR) {
     const auto result = dv::carsds::processPar(kJuneDSPath);
 
