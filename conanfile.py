@@ -45,6 +45,9 @@ class CarsdsConan(ConanFile):
         tc.generate()
 
     def requirements(self):
+        self.requires("vincentlaucsb-csv-parser/2.3.0")
+        self.requires("nlohmann_json/3.11.3")
+        self.requires("magic_enum/0.9.6")
         if self.options.with_tests:
             self.requires("gtest/1.14.0")
 
