@@ -7,3 +7,4 @@
 - [x] read input data
 - [ ] process objects in reduce?
 - [ ] tunings
+- [ ] how to use the project (README.md)

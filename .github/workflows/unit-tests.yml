@@ -21,6 +21,7 @@ jobs:
         run: |
           apt-get update -qq
           apt-get install -y build-essential
+          apt-get install -y git-lfs
 
       - name: Install python3
         shell: bash
