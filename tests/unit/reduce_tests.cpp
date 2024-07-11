@@ -42,14 +42,13 @@ namespace {
 }
 
 
-template <typename ExecutionType> class TransportTest : public ::testing::Test {};
+template <typename ExecutionType> class ReduceTest : public ::testing::Test {};
 
 using ExecutionTypes = ::testing::Types<std::execution::sequenced_policy, std::execution::parallel_policy, std::execution::parallel_unsequenced_policy>;
 
-TYPED_TEST_SUITE(TransportTest, ExecutionTypes);
+TYPED_TEST_SUITE(ReduceTest, ExecutionTypes);
 
-//TYPED_TEST(TransportTest, DISABLED_CountBig) {
-TYPED_TEST(TransportTest, CountBig) {
+TYPED_TEST(ReduceTest, CountBig) {
     const size_t num = 10000;
     GenResult result = generateRandomTransports(num);
     constexpr TypeParam executionPolicy;

@@ -11,7 +11,6 @@
 #include <execution>
 #include <numeric>
 #include <stdexcept>
-#include <unordered_map>
 #include <string_view>
 
 using dv::CountResult;
@@ -53,6 +52,7 @@ nlohmann::json processPar(const std::filesystem::path& in) {
             transports.emplace_back(Transport::fromCSVRow(row));
         }
         // scope to release memory, which is not needed anymore...
+        // if we have lot of memory - we can avoid this scope, to save time on memory deallocation...
     }
 
     // to specify execution policy we should use forward iterator instead of input iterator...
