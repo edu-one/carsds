@@ -49,6 +49,13 @@ cmake --build --preset conan-release
 ctest --preset conan-release
 ```
 
+# Run the program
+```bash
+carsds_cli <seq|par> <path/to/dataset>
+```
+
+# Local execution [results](RESULTS.md)
+
 
 >📝
 > Based on the template https://github.com/edu-one/cpptest
